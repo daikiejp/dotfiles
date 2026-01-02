@@ -11,7 +11,7 @@ autoload -Uz compinit
 compinit
 
 # Speed optimization: Only check cache once per day
-if [[ -n ${ZDOTDIR}/.zcompdump(#qNmh+24) ]]; then
+if [[ -n ~/.zcompdump(#qNmh+24) ]]; then
   compinit
 else
   compinit -C
