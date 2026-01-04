@@ -28,7 +28,7 @@ curl -X POST "$API_URL" \
   -d "$response"
 
 time_coding=$(echo "$response" | jq -r '.data[0].grand_total.text')
-time_japanese=$(echo "$response" | jq -r '.data[0].grand_total.text' | sed -E 's/ hrs?/時間/g; s/ mins?/分/g; s/ //g')
+time_japanese=$(echo "$response" | jq -r '.data[0].grand_total.text' | sed -E 's/ hrs?/時間/g; s/ mins?/分/g; s/ secs?/秒/g; s/ //g')
 
 # Debug
 echo "Coding: $time_coding"
