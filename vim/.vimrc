@@ -63,6 +63,10 @@ set scrolloff=8
 set signcolumn=yes
 " set colorcolumn=80
 
+" Status line
+set laststatus=0
+set noshowmode
+
 " Wrapping
 set nowrap
 
