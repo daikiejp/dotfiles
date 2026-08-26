@@ -9,14 +9,10 @@
 
 typeset -U path
 path=(
+  /opt/homebrew/bin
+  /opt/homebrew/sbin
   $HOME/.local/bin
   $HOME/bin
-  /usr/local/bin
-  /usr/local/sbin
-  /usr/bin
-  /usr/sbin
-  /bin
-  /sbin
   $path
 )
 export PATH
@@ -115,12 +111,6 @@ fi
 if command -v starship &> /dev/null; then
   eval "$(starship init zsh)"
 fi
-
-# ==============================================================================
-# Added by LM Studio CLI (lms)
-# ==============================================================================#
-
-export PATH="$PATH:/Users/danny/.lmstudio/bin"
 
 # ==============================================================================
 # Nvm
