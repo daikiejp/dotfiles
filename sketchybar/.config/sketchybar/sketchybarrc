@@ -69,11 +69,11 @@ sketchybar --default "${default[@]}"
 # Aerospace
 sketchybar --add event aerospace_workspace_change
 
-for sid in $(aerospace list-workspaces --all); do
+for sid in $(/opt/homebrew/bin/aerospace list-workspaces --all); do
     sketchybar --add item space.$sid left \
         --subscribe space.$sid aerospace_workspace_change \
         --set space.$sid \
-        background.color=0x40ffffff \
+        background.color=0xff5e81ac \
         background.corner_radius=5 \
         background.height=20 \
         background.drawing=off \
@@ -82,7 +82,7 @@ for sid in $(aerospace list-workspaces --all); do
         icon.padding_left=0 \
         label.padding_right=9 \
         label.padding_left=7 \
-        click_script="aerospace workspace $sid" \
+        click_script="/opt/homebrew/bin/aerospace workspace $sid" \
         script="$CONFIG_DIR/plugins/aerospace.sh $sid"
 done
 
@@ -130,5 +130,8 @@ sketchybar --add item clock right \
                        updates=on \
                        drawing=off
 
-##### Force all scripts to run the first time (never do this in a script) #####
-#sketchybar --update
+##### Initial state #####
+# 'sketchybar --update' does not run scripts of event-subscribed items, so we
+# fire the event ourselves to highlight the focused workspace at startup.
+sketchybar --trigger aerospace_workspace_change \
+    FOCUSED_WORKSPACE="$(/opt/homebrew/bin/aerospace list-workspaces --focused)"
