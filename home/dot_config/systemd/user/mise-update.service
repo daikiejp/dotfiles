@@ -1,0 +1,13 @@
+# ==============================================================================
+# Weekly runtime upgrade (Linux)
+# DaikieJP - 2026
+# ==============================================================================
+
+[Unit]
+Description=Upgrade mise-managed runtimes and prune old versions
+
+[Service]
+Type=oneshot
+ExecStart=%h/.config/mise/update.sh
+Nice=10
+IOSchedulingClass=idle

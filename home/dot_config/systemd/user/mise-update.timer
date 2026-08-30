@@ -1,0 +1,18 @@
+# ==============================================================================
+# Weekly runtime upgrade — timer (Linux)
+# DaikieJP - 2026
+#
+# Enable with:  systemctl --user enable --now mise-update.timer
+# ==============================================================================
+
+[Unit]
+Description=Weekly mise runtime upgrade
+
+[Timer]
+OnCalendar=Sun 03:00
+# If the machine was off at 03:00, run it once it comes back up
+Persistent=true
+RandomizedDelaySec=30m
+
+[Install]
+WantedBy=timers.target

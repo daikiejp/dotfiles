@@ -1,0 +1,52 @@
+# ==============================================================================
+# Local secrets
+# DaikieJP - 2026
+#
+# chezmoi creates this file ONCE (create_) and never touches it again: the
+# values belong to this machine and are never versioned. Fill in what you need.
+#
+# Format: KEY=value  (no spaces around the =; the scripts parse it with
+# `grep KEY | cut -d= -f2-`, so do not repeat key names in comments and do not
+# leave duplicate keys).
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Own API (used by the SketchyBar wakatime and music modules)
+# ------------------------------------------------------------------------------
+DAIKIE_TOKEN=
+API_WAKATIME_URL=
+DAIKIE_WAKATIME_URL=
+DAIKIE_SONGPLAYED_URL=
+
+# ------------------------------------------------------------------------------
+# Hosting / deploy
+# ------------------------------------------------------------------------------
+NAMECHEAP_USER=
+NAMECHEAP_HOST=
+NAMECHEAP_DIR=
+AWS_USER=
+AWS_HOST=
+AWS_DIR=
+
+# ------------------------------------------------------------------------------
+# Backups
+# ------------------------------------------------------------------------------
+LOCAL_BACKUP_DIR_DAIKIEAPP=
+LOCAL_BACKUP_DIR_JAPACODE=
+
+# ------------------------------------------------------------------------------
+# Local databases
+# ------------------------------------------------------------------------------
+LOCAL_DB_DAIKIEAPP=
+LOCAL_DB_JAPACODE=
+LOCAL_DB_USER=
+LOCAL_DB_HOST=
+LOCAL_DB_PASS=
+
+# ------------------------------------------------------------------------------
+# Tasks
+# ------------------------------------------------------------------------------
+API_URL=
+TASK_API_TOKEN=
+TASK_DB_PATH=
+TASK_USER_ID=

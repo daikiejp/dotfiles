@@ -1,0 +1,67 @@
+# ==============================================================================
+# chezmoi externals
+# DaikieJP - 2026
+#
+# Third-party repos (plus the Neovim config) that chezmoi clones and keeps up
+# to date on its own. Replaces the git submodules and the `git clone` calls of
+# the old install.sh. They refresh on `chezmoi apply` once refreshPeriod
+# expires, or on demand with `chezmoi apply --refresh-externals`.
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Neovim — own repo, still edited and published from ~/.config/nvim
+# ------------------------------------------------------------------------------
+[".config/nvim"]
+    type = "git-repo"
+    url = "https://github.com/daikiejp/nvim.git"
+    refreshPeriod = "168h"
+    [".config/nvim".clone]
+        args = ["--depth", "1"]
+    [".config/nvim".pull]
+        args = ["--ff-only"]
+
+# ------------------------------------------------------------------------------
+# Zsh plugins
+# ------------------------------------------------------------------------------
+[".config/zsh/plugins/zsh-autosuggestions"]
+    type = "git-repo"
+    url = "https://github.com/zsh-users/zsh-autosuggestions.git"
+    refreshPeriod = "168h"
+    [".config/zsh/plugins/zsh-autosuggestions".clone]
+        args = ["--depth", "1"]
+    [".config/zsh/plugins/zsh-autosuggestions".pull]
+        args = ["--ff-only"]
+
+[".config/zsh/plugins/zsh-syntax-highlighting"]
+    type = "git-repo"
+    url = "https://github.com/zsh-users/zsh-syntax-highlighting.git"
+    refreshPeriod = "168h"
+    [".config/zsh/plugins/zsh-syntax-highlighting".clone]
+        args = ["--depth", "1"]
+    [".config/zsh/plugins/zsh-syntax-highlighting".pull]
+        args = ["--ff-only"]
+
+# ------------------------------------------------------------------------------
+# Tmux Plugin Manager — TPM clones the remaining plugins itself
+# ------------------------------------------------------------------------------
+[".tmux/plugins/tpm"]
+    type = "git-repo"
+    url = "https://github.com/tmux-plugins/tpm.git"
+    refreshPeriod = "168h"
+    [".tmux/plugins/tpm".clone]
+        args = ["--depth", "1"]
+    [".tmux/plugins/tpm".pull]
+        args = ["--ff-only"]
+
+{{- if and .gui (ne .chezmoi.os "darwin") }}
+
+# ------------------------------------------------------------------------------
+# Nerd Font (on macOS Homebrew installs it as a cask)
+# ------------------------------------------------------------------------------
+[".local/share/fonts/JetBrainsMonoNerdFont"]
+    type = "archive"
+    url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.tar.xz"
+    exact = true
+    stripComponents = 0
+    refreshPeriod = "8760h"
+{{- end }}

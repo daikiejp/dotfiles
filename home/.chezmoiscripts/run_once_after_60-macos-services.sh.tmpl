@@ -1,0 +1,46 @@
+{{- if and (eq .family "darwin") .gui -}}
+#!/bin/bash
+# ==============================================================================
+# macOS services (AeroSpace + SketchyBar)
+# DaikieJP - 2026
+# ==============================================================================
+
+set -euo pipefail
+
+# ------------------------------------------------------------------------------
+# AeroSpace
+# It is a cask (an .app), not a formula: `brew services start aerospace`
+# fails with "No available formula". It is started by opening the app.
+# ------------------------------------------------------------------------------
+if pgrep -xq AeroSpace; then
+  echo "✅ AeroSpace is already running."
+elif [ -d "/Applications/AeroSpace.app" ]; then
+  echo "🚀 Starting AeroSpace..."
+  open -a AeroSpace || echo "⚠️  Could not start AeroSpace."
+else
+  echo "ℹ️  AeroSpace is not installed; skipping."
+fi
+
+# ------------------------------------------------------------------------------
+# SketchyBar
+# ------------------------------------------------------------------------------
+if ! command -v brew >/dev/null 2>&1; then
+  exit 0
+fi
+
+if ! brew list sketchybar >/dev/null 2>&1; then
+  echo "ℹ️  SketchyBar is not installed; skipping."
+  exit 0
+fi
+
+if pgrep -xq sketchybar; then
+  echo "✅ SketchyBar is already running; reloading config..."
+  sketchybar --reload || true
+else
+  echo "🎨 Starting SketchyBar..."
+  brew services start sketchybar || {
+    echo "⚠️  brew services failed (usually because the agent was already loaded)."
+    echo "   If needed: brew services restart sketchybar"
+  }
+fi
+{{- end -}}

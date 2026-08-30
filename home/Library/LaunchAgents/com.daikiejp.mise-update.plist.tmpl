@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Weekly runtime upgrade (macOS)
+  DaikieJP - 2026
+
+  Runs ~/.config/mise/update.sh every Sunday at 03:00. If the Mac is asleep at
+  that time, launchd runs it on the next wake instead of skipping the week.
+
+  Disable with:  launchctl bootout gui/$UID/com.daikiejp.mise-update
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.daikiejp.mise-update</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>{{ .chezmoi.homeDir }}/.config/mise/update.sh</string>
+    </array>
+
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Weekday</key><integer>0</integer>
+        <key>Hour</key><integer>3</integer>
+        <key>Minute</key><integer>0</integer>
+    </dict>
+
+    <key>RunAtLoad</key>
+    <false/>
+
+    <key>LowPriorityIO</key>
+    <true/>
+
+    <key>Nice</key>
+    <integer>10</integer>
+
+    <key>StandardOutPath</key>
+    <string>{{ .chezmoi.homeDir }}/.local/state/mise/launchd.log</string>
+    <key>StandardErrorPath</key>
+    <string>{{ .chezmoi.homeDir }}/.local/state/mise/launchd.log</string>
+</dict>
+</plist>

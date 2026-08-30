@@ -1,24 +1,20 @@
 # ==============================================================================
-# Gitignore
+# Zsh Run Commands
 # DaikieJP - 2026
 # ==============================================================================
 
 # ==============================================================================
-# Estado local de chezmoi
+# Imports
 # ==============================================================================
 
-.chezmoistate.boltdb
+source ~/.config/zsh/env.zsh
+source ~/.config/zsh/aliases.zsh
+source ~/.config/zsh/plugins.zsh
 
 # ==============================================================================
-# OS noise
+# Local overrides
+# Not managed by chezmoi: anything specific to this machine (keys, client
+# paths, experiments). Never versioned.
 # ==============================================================================
 
-.DS_Store
-*.swp
-*~
-
-# ==============================================================================
-# Herramientas
-# ==============================================================================
-
-.ruby-lsp/
+[ -f ~/.config/zsh/local.zsh ] && source ~/.config/zsh/local.zsh

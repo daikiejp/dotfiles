@@ -1,0 +1,45 @@
+#!/bin/bash
+# ==============================================================================
+# Tmux plugins
+# DaikieJP - 2026
+#
+# chezmoi clones TPM (.chezmoiexternal.toml). This script only (1) makes TPM
+# install the plugins declared in .tmux.conf if they are missing, and (2)
+# injects our custom script into the Dracula theme, where it looks for it.
+# ==============================================================================
+
+set -euo pipefail
+
+TPM_DIR="$HOME/.tmux/plugins/tpm"
+PLUGIN_DIR="$HOME/.tmux/plugins"
+
+[ -x "$TPM_DIR/bin/install_plugins" ] || exit 0
+
+# ------------------------------------------------------------------------------
+# Install missing plugins
+# ------------------------------------------------------------------------------
+missing=0
+for p in tmux-sensible tmux-resurrect tmux-continuum tmux; do
+  [ -d "$PLUGIN_DIR/$p" ] || missing=1
+done
+
+if [ "$missing" -eq 1 ]; then
+  echo "🔌 Installing tmux plugins with TPM..."
+  "$TPM_DIR/bin/install_plugins" || true
+fi
+
+# ------------------------------------------------------------------------------
+# Dracula theme custom script
+# Dracula resolves `custom:daikie.sh` against its own scripts/, so we copy it
+# from the canonical versioned copy in ~/.config/tmux/scripts.
+# ------------------------------------------------------------------------------
+SRC="$HOME/.config/tmux/scripts/daikie.sh"
+DEST_DIR="$PLUGIN_DIR/tmux/scripts"
+
+if [ -f "$SRC" ] && [ -d "$DEST_DIR" ]; then
+  if ! cmp -s "$SRC" "$DEST_DIR/daikie.sh"; then
+    cp "$SRC" "$DEST_DIR/daikie.sh"
+    chmod +x "$DEST_DIR/daikie.sh"
+    echo "🎨 daikie.sh injected into the Dracula theme."
+  fi
+fi

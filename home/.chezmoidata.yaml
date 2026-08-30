@@ -1,0 +1,212 @@
+# ==============================================================================
+# Packages
+# DaikieJP - 2026
+#
+# Single source of truth for brew / apt / pacman. Editing this list triggers a
+# reinstall on the next `chezmoi apply` (the scripts are run_onchange_ and
+# carry the hash of this file).
+# ==============================================================================
+
+packages:
+
+  # ----------------------------------------------------------------------------
+  # macOS — Homebrew
+  # ----------------------------------------------------------------------------
+  darwin:
+    taps:
+      - FelixKratz/formulae
+      - nikitabobko/tap
+      - stripe/stripe-cli
+    brews:
+      # Shell and terminal
+      - zsh
+      - starship
+      - fzf
+      - ripgrep
+      - bat
+      - eza
+      - fd
+      - zoxide
+      # Development
+      - neovim
+      - git
+      - tmux
+      - btop
+      - wget
+      - jq
+      - chezmoi
+
+      # Git and GitHub
+      - gh
+      - git-delta
+      - git-filter-repo
+      - lazygit
+      - gitleaks
+
+      # Containers
+      - colima
+      - docker
+      - docker-compose
+      - lazydocker
+      - podman-compose
+
+      # Languages and version managers
+      # mise owns node/ruby/python/php/rust; versions live in
+      # dot_config/mise/config.toml. See docs/languages.md.
+      - mise
+      - libiconv                 # needed to build PHP with mise
+      - pnpm
+      - zig
+      - luarocks
+
+      # Databases
+      - postgresql@14
+      - postgresql@18
+      - redis
+
+      # Language servers
+      - dockerfile-language-server
+      - lua-language-server
+      - marksman
+      - pyright
+      - ruby-lsp
+      - rust-analyzer
+      - tailwindcss-language-server
+      - typescript-language-server
+      - vscode-langservers-extracted
+      - yaml-language-server
+
+      # Formatters and linters
+      - black
+      - eslint
+      - isort
+      - prettier
+      - prettierd
+      - selene
+      - stylua
+      - typos-cli
+      - yamlfix
+
+      # Cloud and services
+      - awscli
+      - stripe/stripe-cli/stripe
+      - vercel
+
+      # AI
+      - ollama
+      - opencode
+      - tgpt
+
+      # Multimedia
+      - ffmpeg
+      - gallery-dl
+      - pngpaste
+
+      # Utilities
+      - aerc
+      - ddrescue
+      - fdupes
+      - mingw-w64
+      - pigz
+      - sevenzip
+      - tag
+      - w3m
+    # Only when .gui = true
+    casks:
+      - ghostty
+      - font-cascadia-code       # Ghostty's main font-family
+      - font-jetbrains-mono-nerd-font
+      - font-hack-nerd-font      # used by SketchyBar
+
+      # Design fonts
+      - font-lato
+      - font-monoton
+      - font-montserrat
+      - font-montserrat-alternates
+      - font-poppins
+      - font-roboto
+      - font-roboto-condensed
+      - font-roboto-slab
+      - font-chivo-mono
+      - nikitabobko/tap/aerospace
+
+      # Apps
+      - visual-studio-code
+      - claude
+      - claude-code
+      - obsidian
+      - slack
+      - brave-browser
+      - tableplus
+      - vlc
+      - rar
+      - shadowsocksx-ng
+    gui_brews:
+      - FelixKratz/formulae/sketchybar
+      - FelixKratz/formulae/borders   # JankyBorders, started by aerospace.toml
+
+  # ----------------------------------------------------------------------------
+  # Debian / Ubuntu — apt
+  # ----------------------------------------------------------------------------
+  debian:
+    apt:
+      # Base needed to build and install everything else
+      - build-essential
+      - curl
+      - wget
+      - unzip
+      - ca-certificates
+      - gnupg
+      # Shell and terminal
+      - zsh
+      - git
+      - tmux
+      - ripgrep
+      - fzf
+      - bat
+      - fd-find
+      - btop
+      - jq
+    # Not in apt (or the version is too old): installed with the official
+    # installers into ~/.local. See 10-packages-debian.sh.
+    manual:
+      - neovim
+      - starship
+      - zoxide
+      - eza
+      - mise
+    # GUI only. Best-effort: not every Debian/Ubuntu release ships these.
+    gui_apt:
+      - alacritty
+
+  # ----------------------------------------------------------------------------
+  # Arch — pacman
+  # ----------------------------------------------------------------------------
+  arch:
+    pacman:
+      - base-devel
+      - curl
+      - wget
+      - unzip
+      - zsh
+      - git
+      - tmux
+      - neovim
+      - ripgrep
+      - fzf
+      - bat
+      - eza
+      - fd
+      - zoxide
+      - starship
+      - btop
+      - jq
+      - mise
+    gui_pacman:
+      - ttf-jetbrains-mono-nerd
+      - ttf-hack-nerd
+      # Terminal and tiling WM (the macOS counterparts are Ghostty + AeroSpace)
+      - alacritty
+      - i3-wm
+      - i3status
+      - dmenu

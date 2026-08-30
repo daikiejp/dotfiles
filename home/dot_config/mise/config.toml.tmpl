@@ -1,0 +1,41 @@
+# ==============================================================================
+# mise — runtimes
+# DaikieJP - 2026
+#
+# Single source of truth for language versions. Replaces nvm, rbenv and
+# rustup: `mise install` on a new machine reproduces exactly these.
+#
+# Everything tracks "latest" on purpose. Do NOT swap these for numeric pins and
+# then run `mise upgrade --bump`: --bump rewrites this file, chezmoi owns it,
+# and the two would fight forever (`chezmoi status` would never come back
+# clean). With "latest" the file never changes and upgrading is a no-op for
+# chezmoi.
+#
+#   mise ls                  what is active
+#   mise install             install everything in this file
+#   mise upgrade --prune     move to the newest and delete what it replaced
+#   ~/.config/mise/update.sh the same thing, run weekly on its own
+#
+# A project can override any of these with its own .mise.toml or .tool-versions,
+# and `not_found_auto_install` installs that version on entry.
+# ==============================================================================
+
+[tools]
+node   = "latest"
+ruby   = "latest"
+python = "latest"
+php    = "latest"
+rust   = "latest"
+
+{{ if eq .chezmoi.os "darwin" -}}
+[env]
+# PHP's configure cannot find iconv on macOS by itself: Homebrew keeps libiconv
+# keg-only, so the build dies with "Please specify the install prefix of iconv".
+# Without this, `mise install php` fails on every fresh Mac.
+PHP_EXTRA_CONFIGURE_OPTIONS = "--with-iconv={{ output "brew" "--prefix" "libiconv" | trim }}"
+
+{{ end -}}
+[settings]
+# Trust the lockfile-free workflow: install missing versions on demand instead
+# of failing when entering a project that pins something else.
+not_found_auto_install = true

@@ -1,0 +1,62 @@
+{{/* ============================================================================
+     chezmoi config template
+     DaikieJP - 2026
+     Evaluated once, on `chezmoi init`. The answers are stored in
+     ~/.config/chezmoi/chezmoi.toml and feed every other template.
+     ============================================================================ */}}
+
+{{/* --------------------------------------------------------------------------
+     System identity.
+     $osid   -> readable label, e.g. "darwin", "linux-ubuntu", "linux-arch"
+     $family -> package manager family: darwin | debian | arch | unknown
+     -------------------------------------------------------------------------- */}}
+{{- $osid := .chezmoi.os -}}
+{{- $family := "unknown" -}}
+
+{{- if eq .chezmoi.os "darwin" -}}
+{{-   $family = "darwin" -}}
+{{- else if eq .chezmoi.os "linux" -}}
+{{/*   Careful: chezmoi runs with missingkey=error, so keys must be checked
+       with hasKey. Arch, for instance, does not define ID_LIKE. */}}
+{{-   $id     := "" -}}
+{{-   $idLike := "" -}}
+{{-   if hasKey .chezmoi.osRelease "id"     -}}{{- $id     = .chezmoi.osRelease.id     -}}{{- end -}}
+{{-   if hasKey .chezmoi.osRelease "idLike" -}}{{- $idLike = .chezmoi.osRelease.idLike -}}{{- end -}}
+{{-   if $id -}}
+{{-     $osid = printf "linux-%s" $id -}}
+{{-   end -}}
+{{-   $tokens := concat (list $id) (splitList " " $idLike) -}}
+{{-   if or (has "debian" $tokens) (has "ubuntu" $tokens) -}}
+{{-     $family = "debian" -}}
+{{-   else if has "arch" $tokens -}}
+{{-     $family = "arch" -}}
+{{-   end -}}
+{{- end -}}
+
+{{/* A "headless" machine is a container, a devcontainer or an SSH server:
+     no GUI, so no Ghostty / AeroSpace / SketchyBar / fonts. */}}
+{{- $headless := false -}}
+{{- if or (env "CODESPACES") (env "REMOTE_CONTAINERS") -}}
+{{-   $headless = true -}}
+{{- end -}}
+{{- if and (eq .chezmoi.os "linux") (not (env "DISPLAY")) (not (env "WAYLAND_DISPLAY")) -}}
+{{-   $headless = true -}}
+{{- end -}}
+
+{{- $gui := promptBoolOnce . "gui" "Install GUI apps (Ghostty, Nerd Fonts, AeroSpace, SketchyBar)?" (not $headless) -}}
+{{/* Careful: do NOT name this key "packages" — it would collide with the
+     `packages` map from .chezmoidata.yaml and shadow it. */}}
+{{- $installPackages := promptBoolOnce . "installPackages" "Install system packages automatically (brew / apt / pacman)?" true -}}
+
+[data]
+    gui = {{ $gui }}
+    installPackages = {{ $installPackages }}
+    headless = {{ $headless }}
+    osid = {{ $osid | quote }}
+    family = {{ $family | quote }}
+
+[diff]
+    exclude = ["scripts"]
+
+[status]
+    exclude = ["scripts"]
