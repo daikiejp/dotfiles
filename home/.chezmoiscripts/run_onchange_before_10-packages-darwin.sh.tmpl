@@ -37,6 +37,27 @@ fi
 # single conflicting package would stop the dotfiles from being applied and
 # the later scripts from running.
 # ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# Tap trust
+#
+# Homebrew 6 refuses to load formulae and casks from third-party taps until they
+# are trusted, and `brew bundle` does not prompt: it just skips them. Without
+# this, SketchyBar, JankyBorders, AeroSpace and the Stripe CLI silently never
+# install on a new machine.
+#
+# Trust is granted per package, not per whole tap, so a tap cannot slip in
+# anything else later. `brew trust` does not exist before Homebrew 6, hence the
+# guard.
+# ------------------------------------------------------------------------------
+if brew trust --help >/dev/null 2>&1; then
+  echo "🔏 Trusting third-party tap packages..."
+{{ range .packages.darwin.brews }}{{ if contains "/" . }}  brew trust --formula {{ . | quote }} >/dev/null 2>&1 || true
+{{ end }}{{ end }}{{- if $.gui }}
+{{ range .packages.darwin.gui_brews }}{{ if contains "/" . }}  brew trust --formula {{ . | quote }} >/dev/null 2>&1 || true
+{{ end }}{{ end }}{{ range .packages.darwin.casks }}{{ if contains "/" . }}  brew trust --cask {{ . | quote }} >/dev/null 2>&1 || true
+{{ end }}{{ end }}{{- end }}
+fi
+
 echo "📦 Applying Brewfile..."
 
 BUNDLE_LOG="$(mktemp)"

@@ -54,8 +54,36 @@ packages:
       # mise owns node/ruby/python/php/rust; versions live in
       # dot_config/mise/config.toml. See docs/languages.md.
       - mise
-      - libiconv                 # needed to build PHP with mise
       - pnpm
+
+      # Toolchain mise needs to build PHP and Ruby from source. Without these
+      # `mise install php` dies at configure/buildconf on a fresh machine:
+      # libiconv is keg-only so PHP cannot find it, and autoconf is not shipped
+      # with the Command Line Tools.
+      - autoconf
+      - automake
+      - bison
+      - re2c
+      - pkgconf
+      - libiconv
+      - libzip
+      - libjpeg
+      - libpng
+      - freetype
+      - libxml2
+      - zlib
+      - libedit
+      - icu4c
+      # Libraries PHP's ./configure links against (--with-external-gd,
+      # --with-sodium, --with-bz2, --with-curl, and Argon2 password hashing)
+      - gd
+      - webp
+      - gmp
+      - libsodium
+      - oniguruma
+      - bzip2
+      - curl
+      - argon2
       - zig
       - luarocks
 
